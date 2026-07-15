@@ -1,11 +1,13 @@
 # Tin Vịt 🦆
 
-Tin tức Việt Nam, tổng hợp tự động từ nhiều nguồn.
+> Vietnamese news aggregation platform — crawls, stores, and serves news from multiple sources.
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**Topics:** `nextjs` `fastapi` `python` `postgresql` `web-scraping` `news-aggregator` `vietnamese` `docker` `tailwindcss` `sqlalchemy`
 
 ## Demo
 

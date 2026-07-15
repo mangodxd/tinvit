@@ -1,0 +1,33 @@
+site: tuoitre
+name: Tuổi Trẻ
+base_url: https://tuoitre.vn
+
+listing:
+  url: https://tuoitre.vn/thoi-su.htm
+  article_links:
+    - //a[contains(@href,"-1002")]/@href
+    - //a[contains(@href,"-1001")]/@href
+
+article:
+  title:
+    - //h1[contains(@class,"detail-title")]/text()
+    - //meta[@property="og:title"]/@content
+  description:
+    - //meta[@name="description"]/@content
+    - //h2[contains(@class,"detail-sapo")]/text()
+  content:
+    - //div[contains(@class,"detail-content")]/p
+    - //div[contains(@class,"detail-content")]/h2
+    - //div[contains(@class,"detail-content")]/figure
+    - //div[contains(@class,"detail-content")]//div[@type="VideoStream"]
+  date:
+    - //meta[@property="article:published_time"]/@content
+    - //div[@data-role="publishdate"]/text()
+  date_format: "%Y-%m-%dT%H:%M:%S%z"
+  tags:
+    - //meta[@property="article:tag"]/@content
+    - //div[contains(@class,"detail-tab")]//a/text()
+  category:
+    - //div[contains(@class,"detail-cate")]/a/text()
+  author:
+    - //div[contains(@class,"author")]//a/text()

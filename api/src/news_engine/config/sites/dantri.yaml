@@ -1,0 +1,85 @@
+site: dantri
+name: Dân Trí
+base_url: https://dantri.com.vn
+
+render:
+  use_browser: false
+
+listing:
+  url: https://dantri.com.vn
+  article_links:
+    - //h3/a/@href
+    - //article/a/@href
+    - //a[contains(@href,"dantri.com.vn")]/@href
+
+article:
+  title:
+    - //h1/text()
+    - //meta[@property="og:title"]/@content
+  description:
+    - //meta[@name="description"]/@content
+    - //p[contains(@class,"sapo")]/text()
+    - //h2/text()
+  content:
+    - //div[contains(@class,"singular-content")]/p
+    - //div[contains(@class,"singular-content")]/figure
+    - //div[contains(@class,"singular-content")]//img
+    - //article[contains(@class,"singular")]/p
+    - //article[contains(@class,"singular")]/figure
+    - //article[contains(@class,"singular")]//img
+    - //article//p
+    - //article//figure
+    - //article//img
+    - //div[contains(@class,"content-detail")]/p
+    - //div[contains(@class,"content-detail")]/figure
+    - //div[contains(@class,"content-detail")]//img
+    - //div[contains(@class,"detail-content")]/p
+    - //div[contains(@class,"detail-content")]/h2
+    - //div[contains(@class,"detail-content")]/figure
+  date:
+    - //time/@datetime
+    - //meta[@property="article:published_time"]/@content
+    - //time/text()
+  date_format: "%Y-%m-%dT%H:%M:%S%z"
+  tags:
+    - //meta[@property="article:tag"]/@content
+  category:
+    - //ul[contains(@class,"breadcrumb")]/li[last()-1]/a/text()
+    - //nav[contains(@class,"breadcrumb")]/a[last()]/text()
+    - //ol[contains(@class,"breadcrumb")]/li[last()-1]/a/text()
+    - //div[contains(@class,"breadcrumb")]/a[last()]/text()
+    - //*[@class="bread-crumb"]//a[last()]/text()
+    - //*[contains(@class,"breadcrumbs")]//a[last()]/text()
+  category_from_path: true
+  category_path_map:
+    thoi-su: "Thời sự"
+    the-gioi: "Thế giới"
+    kinh-doanh: "Kinh doanh"
+    the-thao: "Thể thao"
+    giai-tri: "Giải trí"
+    giao-duc: "Giáo dục"
+    suc-khoe: "Sức khỏe"
+    doi-song: "Đời sống"
+    phap-luat: "Pháp luật"
+    khoa-hoc: "Khoa học"
+    cong-nghe: "Công nghệ"
+    o-to-xe-may: "Xe"
+    van-hoa: "Văn hóa"
+    du-lich: "Du lịch"
+    ban-doc: "Bạn đọc"
+    tam-su: "Tâm sự"
+    nha-dat: "Nhà đất"
+    bat-dong-san: "Bất động sản"
+    noi-vu: "Nội vụ"
+    tam-diem: "Thời sự"
+    tam-long-nhan-ai: "Đời sống"
+    dt360: "Thể thao"
+    lao-dong-viec-lam: "Đời sống"
+    tinh-yeu-gioi-tinh: "Đời sống"
+    thoi-tiet: "Đời sống"
+    so-hoa: "Công nghệ"
+    song: "Đời sống"
+    an: "Đời sống"
+  author:
+    - //meta[@name="author"]/@content
+    - //span[contains(@class,"author")]/text()

@@ -1,0 +1,56 @@
+site: vnexpress
+name: VnExpress
+base_url: https://vnexpress.net
+
+render:
+  use_browser: false
+
+listing:
+  url: https://vnexpress.net
+  article_links:
+    - //h3[contains(@class,"title-news")]/a/@href
+    - //article[contains(@class,"item-news")]/a/@href
+
+article:
+  title:
+    - //h1[contains(@class,"title-detail")]/text()
+  description:
+    - //p[contains(@class,"description")]/text()
+    - //meta[@name="description"]/@content
+  content:
+    - //article[contains(@class,"fck_detail")]/p[not(contains(@class,"author"))]
+    - //article[contains(@class,"fck_detail")]/figure
+    - //article[contains(@class,"fck_detail")]//div[contains(@class,"box_brief_info")]
+    - //article[contains(@class,"fck_detail")]//img
+    - //div[contains(@class,"box_embed_video")]//video[@src]
+    - //div[contains(@class,"embed_video_new")]//video[@src]
+  date:
+    - //meta[@property="article:published_time"]/@content
+    - //span[contains(@class,"date")]/text()
+  date_format: "%Y-%m-%dT%H:%M:%S%z"
+  tags:
+    - //meta[@property="article:tag"]/@content
+    - //ul[contains(@class,"tags")]/li/a/text()
+  category:
+    - //ul[contains(@class,"breadcrumb")]/li[last()-1]/a/text()
+  category_from_path: true
+  category_path_map:
+    the-gioi: "Thế giới"
+    kinh-doanh: "Thị trường"
+    bat-dong-san: "Bất động sản"
+    the-thao: "Thể thao"
+    giai-tri: "Giải trí"
+    giao-duc: "Giáo dục"
+    suc-khoe: "Sức khỏe"
+    doi-song: "Đời sống"
+    phap-luat: "Pháp luật"
+    khoa-hoc: "Khoa học"
+    cong-nghe: "Công nghệ"
+    oto-xe-may: "Xe"
+    du-lich: "Du lịch"
+    ban-doc: "Bạn đọc"
+    tam-su: "Tâm sự"
+    nha-dat: "Nhà đất"
+  author:
+    - //meta[@name="author"]/@content
+    - //p[contains(@class,"author")]/text()

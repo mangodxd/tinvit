@@ -1,86 +1,250 @@
-# TinVit
+# Tin Vịt 🦆
 
-Vietnamese news aggregation platform. Crawls, stores, and serves articles from Vietnamese news sources.
+Tin tức Việt Nam, tổng hợp tự động từ nhiều nguồn.
 
-## Live Demo
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-- Frontend: [https://tinvit-web.vercel.app](https://tinvit-web.vercel.app)
-- API: [https://tinvit-api.onrender.com](https://tinvit-api.onrender.com)
+## Demo
 
-## Structure
+- **Web:** https://tinvit.vercel.app
+- **API:** https://tinvit-api.containers.snapdeploy.app/docs
+
+## About
+
+This is a side project I built to learn about web scraping and full-stack development. It crawls news from VNExpress, Tuổi Trẻ, and Dân Trí, stores them in PostgreSQL, and serves through a FastAPI backend with a Next.js frontend.
+
+**What it does:**
+- Crawls articles every 5 minutes from 3 Vietnamese news sources
+- Categorizes into 20+ topics (Thời sự, Kinh doanh, Công nghệ, etc.)
+- Full-text search using PostgreSQL trigram
+- Detects video articles
+- SEO-friendly with sitemap, OpenGraph, JSON-LD
+
+## Project Structure
 
 ```
 tinvit/
-├── api/         # FastAPI + PostgreSQL — news aggregation engine
-├── web/         # Next.js 14 — frontend application
-└── docs/        # shared documentation
+├── api/                        # Python backend
+│   ├── src/news_engine/
+│   │   ├── api/                # FastAPI routes
+│   │   ├── crawlers/           # News spiders
+│   │   ├── models/             # SQLAlchemy models
+│   │   ├── repositories/       # Database queries
+│   │   ├── services/           # Business logic
+│   │   ├── parsers/            # HTML → structured data
+│   │   └── config/sites/       # Crawl configs (YAML)
+│   ├── tests/                  # Unit tests
+│   ├── Dockerfile              # Docker config for SnapDeploy
+│   └── pyproject.toml
+├── web/                        # Next.js frontend
+│   ├── src/
+│   │   ├── app/                # Pages (App Router)
+│   │   ├── components/         # React components
+│   │   ├── fetchers/           # API calls
+│   │   └── lib/                # Utils, types, constants
+│   └── package.json
+└── README.md
 ```
 
-## Quick start (Local Development)
+## Local Development
+
+### Prerequisites
+
+- Python 3.11+
+- Node.js 18+
+- Docker (for PostgreSQL)
+
+### Setup
 
 ```bash
-# API (requires Docker)
-cd api
-cp .env.example .env
-docker compose up -d
+# clone
+git clone https://github.com/mangodxd/tinvit.git
+cd tinvit
+```
 
-# Web (requires Node.js 18+)
-cd web
+**Database:**
+
+```bash
+cd api
+docker compose up -d
+```
+
+This starts PostgreSQL on port 5432. The database is `newsdb`, user `postgres`, password `123456`.
+
+**API:**
+
+```bash
+# install deps
+pip install -e .
+
+# copy env file (edit if needed)
+cp .env.example .env
+
+# run
+uvicorn src.news_engine.api.main:app --reload
+```
+
+API runs on http://localhost:8000. Docs at http://localhost:8000/docs
+
+**Web:**
+
+```bash
+cd ../web
 npm install
 npm run dev
 ```
 
-- API: http://localhost:8000
-- Web: http://localhost:3000
-- API Docs: http://localhost:8000/docs
+Frontend runs on http://localhost:3000
 
-## Deployment
+### Environment Variables
 
-### Backend (Render)
+**api/.env:**
 
-1. Push to GitHub
-2. Go to [render.com](https://render.com) → New → Blueprint
-3. Connect your GitHub repo
-4. Render will detect `render.yaml` and set up:
-   - Web service for the API
-   - PostgreSQL database
-5. Set environment variable `CORS_ORIGINS` to your Vercel URL:
-   ```json
-   ["https://your-app.vercel.app"]
-   ```
-6. Deploy!
+```env
+# for local dev (docker)
+DATABASE_URL=postgresql+asyncpg://postgres:123456@localhost:5432/newsdb
 
-### Frontend (Vercel)
+# for production (SnapDeploy sets this automatically)
+# DATABASE_URL=postgresql+asyncpg://user:pass@host:5432/dbname
 
-1. Go to [vercel.com](https://vercel.com) → Import Project
-2. Connect your GitHub repo
-3. Set environment variables:
-   - `NEXT_PUBLIC_API_BASE_URL`: Your Render API URL (e.g., `https://tinvit-api.onrender.com`)
-   - `NEXT_PUBLIC_SITE_URL`: Your Vercel URL (e.g., `https://your-app.vercel.app`)
-4. Deploy!
+API_HOST=0.0.0.0
+API_PORT=8000
+CORS_ORIGINS=["http://localhost:3000"]  # add your vercel url for prod
+CRAWLER_TIMEOUT=30
+LOG_LEVEL=INFO
+```
 
-## Tech
+**web/.env.local:**
 
-| Layer | Stack |
-|-------|-------|
-| API | Python 3.11+, FastAPI, SQLAlchemy (async), PostgreSQL 16 |
-| Web | Next.js 14, React 18, TypeScript, Tailwind CSS |
-| Crawler | httpx, lxml, APScheduler |
-| Deployment | Render (API) + Vercel (Web) |
+```env
+# for local dev
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# for production
+# NEXT_PUBLIC_API_BASE_URL=https://your-api.snapdeploy.app
+# NEXT_PUBLIC_SITE_URL=https://your-app.vercel.app
+```
+
+### Running Tests
+
+```bash
+cd api
+pytest tests/ -v
+```
+
+## Deploy
+
+### Frontend
+
+```bash
+cd web
+vercel --prod
+```
+
+Or connect your GitHub repo on Vercel, Netlify, or any static host.
+
+**Env vars:**
+
+| Variable | Local | Production |
+|----------|-------|------------|
+| `NEXT_PUBLIC_API_BASE_URL` | `http://localhost:8000` | `https://your-api-domain.com` |
+| `NEXT_PUBLIC_SITE_URL` | `http://localhost:3000` | `https://your-app.vercel.app` |
+
+### Backend
+
+Any Docker-compatible host (Render, Railway, Fly.io, SnapDeploy, etc.).
+
+```bash
+cd api
+docker build -t tinvit-api .
+docker run -p 8000:8000 --env-file .env tinvit-api
+```
+
+**Env vars:**
+
+| Variable | Value |
+|----------|-------|
+| `DATABASE_URL` | `postgresql+asyncpg://user:pass@host:5432/dbname` |
+| `CORS_ORIGINS` | `["https://your-app.vercel.app"]` |
+| `API_HOST` | `0.0.0.0` |
+| `API_PORT` | `8000` |
+| `CRAWLER_TIMEOUT` | `30` |
+| `LOG_LEVEL` | `INFO` |
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
+| Method | Path | Description |
+|--------|------|-------------|
 | GET | `/api/health` | Health check |
 | GET | `/api/home` | Homepage data |
-| GET | `/api/articles` | List articles (paginated) |
-| GET | `/api/articles/search?q=...` | Search articles |
-| GET | `/api/articles/{slug}` | Get article detail |
-| GET | `/api/articles/{slug}/related` | Get related articles |
-| GET | `/api/categories` | List categories |
-| GET | `/api/sources` | List sources |
-| POST | `/api/crawl` | Trigger crawl (admin) |
+| GET | `/api/articles` | List articles (supports `?page=`, `?limit=`, `?source=`, `?category=`) |
+| GET | `/api/articles/search?q=...` | Search |
+| GET | `/api/articles/{slug}` | Article detail |
+| GET | `/api/articles/{slug}/related` | Related articles |
+| GET | `/api/categories` | All categories |
+| GET | `/api/sources` | All sources |
+| POST | `/api/crawl` | Trigger crawl manually |
+
+## Adding a New Source
+
+1. Add YAML config in `api/src/news_engine/config/sites/yoursource.yaml`:
+
+```yaml
+site: yoursource
+name: Your Source
+base_url: https://example.com
+
+listing:
+  url: https://example.com
+  article_links:
+    - //a[@class="article-link"]/@href
+
+article:
+  title:
+    - //h1/text()
+  description:
+    - //meta[@name="description"]/@content
+  content:
+    - //article/body//p
+  date:
+    - //time/@datetime
+  category:
+    - //span[@class="category"]/text()
+  tags:
+    - //meta[@property="article:tag"]/@content
+```
+
+2. Create spider in `api/src/news_engine/crawlers/yoursource.py`:
+
+```python
+from src.news_engine.crawlers.base import BaseSpider
+
+class YourSourceSpider(BaseSpider):
+    source = "yoursource"
+    start_url = "https://example.com"
+```
+
+3. Register in `api/src/news_engine/crawlers/__init__.py`:
+
+```python
+from src.news_engine.crawlers.yoursource import YourSourceSpider
+
+SPIDERS = {
+    # ...existing spiders
+    "yoursource": YourSourceSpider,
+}
+```
+
+## Tech
+
+- **Frontend:** Next.js 14, React 18, TypeScript, Tailwind CSS
+- **Backend:** Python 3.11, FastAPI, SQLAlchemy (async), Pydantic
+- **Database:** PostgreSQL 16 (with pg_trgm for Vietnamese search)
+- **Crawler:** httpx, lxml, APScheduler
 
 ## License
 

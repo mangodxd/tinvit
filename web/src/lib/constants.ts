@@ -57,7 +57,8 @@ export function getCategoryName(slug: string | null): string {
 }
 
 export const SITE_NAME = 'Tin Vịt';
-export const SITE_DESCRIPTION = 'Trang tin tức cập nhật nhanh về thời sự, công nghệ, giải trí, thể thao và đời sống. Theo dõi tin mới mỗi ngày với nội dung chọn lọc, dễ đọc và hữu ích.';
+export const SITE_DESCRIPTION = 'Tin Vịt — Nền tảng tổng hợp tin tức Việt Nam. Thu thập và cập nhật tin mới nhất từ VnExpress, Tuổi Trẻ, Dân Trí với 20+ chuyên mục: Thời sự, Kinh doanh, Công nghệ, Giải trí, Thể thao.';
+export const SITE_SHORT_DESCRIPTION = 'Tổng hợp tin tức Việt Nam từ nhiều nguồn';
 export const DEFAULT_OG_IMAGE = '/images/og-default.svg';
 export const ARTICLES_PER_PAGE = 20;
 
